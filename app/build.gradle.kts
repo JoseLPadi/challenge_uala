@@ -41,10 +41,11 @@ android {
 
 dependencies {
 
-    implementation(libs.insert.koin.koin.android)
-    testImplementation(libs.retrofit)
-    testImplementation(libs.converter.moshi)
-
+    implementation(libs.koin.core)
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.coroutines.android)
@@ -53,6 +54,9 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx) // O la última versión
+    implementation(libs.kotlinx.coroutines.android)
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
 
