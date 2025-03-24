@@ -14,32 +14,54 @@ class CitiesViewModel(private val retrofitInterface: ApiInterface) : BaseViewMod
 
     private val _listCities = MutableStateFlow<List<City>>(emptyList())
     val listCities: StateFlow<List<City>> = _listCities.asStateFlow()
+    private val _initArrayListCities  =  MutableStateFlow<Int>(0)
+    val initArrayListCities: StateFlow<Int> = _initArrayListCities.asStateFlow()
+    private val _finishArrayListCities  =  MutableStateFlow<Int>(0)
+    val finishArrayListCities: StateFlow<Int> = _finishArrayListCities.asStateFlow()
 
-    private val _initArray  =  MutableStateFlow<Int>(0)
-    val initArray: StateFlow<Int> = _initArray.asStateFlow()
-    private val _finishArray  =  MutableStateFlow<Int>(0)
-    val finishArray: StateFlow<Int> = _finishArray.asStateFlow()
+
+    private var filterString : String = ""
 
     fun onFilter(filter: String){
-
+        this.filterString = filter
     }
 
     fun onCityFavorite(city: City, favorite: Boolean) {
+        //update dataStorage
 
     }
 
     fun onShowFavorites( showFavorites: Boolean){
 
+        if (showFavorites){
+            //filter favorite
+
+        } else {
+            //filter unfavorite
+        }
+
     }
 
+    init {
+        getListCities()
+    }
     fun getListCities(){
         viewModelScope.launch {
             try {
-                _listCities.value = retrofitInterface.getCities().await()
+                _listCities.value = retrofitInterface.getCities().await().sortedBy { it.name }
+                _initArrayListCities.value=0
+                _finishArrayListCities.value=_listCities.value.size
             }catch (e: Exception){
                 e.printStackTrace()
 
             }
         }
+    }
+
+    fun getFavoriteCities(){
+        //Call datasorage and return a list of ids of favorite cities.
+
+        //update listFavorites,_finishArrayFavourite,_initArrayFavourite
+
     }
 }

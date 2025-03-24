@@ -24,22 +24,21 @@ import com.example.challengeuala.R
 
 
 @Composable
-fun ItemCityScreen(city: City,
+fun ItemCityWidget(city: City,
                    onCityFavorite: (City, Boolean) ->Unit,
                    onCitySelected: (City) -> Unit,
                    modifier:Modifier = Modifier){
-    ItemCityContent(city, onCityFavorite, onCitySelected,modifier)
+    ItemCityWidgetContent(city, onCityFavorite, onCitySelected,modifier)
 }
 
 @Composable
-private fun ItemCityContent(city: City, onCityFavorite: (City, Boolean) ->Unit,onCitySelected: (City) -> Unit,modifier: Modifier){
+private fun ItemCityWidgetContent(city: City, onCityFavorite: (City, Boolean) ->Unit,onCitySelected: (City) -> Unit,modifier: Modifier){
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { onCitySelected(city) }
-      //  shape = MaterialTheme.shapes.medium,
-        ,elevation = CardDefaults.cardElevation(4.dp)
+            .clickable { onCitySelected(city) },
+        elevation = CardDefaults.cardElevation(4.dp)
     ){
         Row (
             verticalAlignment = Alignment.CenterVertically
@@ -69,5 +68,5 @@ private fun ItemCityContent(city: City, onCityFavorite: (City, Boolean) ->Unit,o
 @Composable
 @Preview
 private fun ItemCityPreview(){
-    ItemCityScreen(City("country","name",22, Coord(1.1,1.1),true), {_,_ ->},{})
+    ItemCityWidget(City("country","name",22, Coord(1.1,1.1),true), {_,_ ->},{})
 }

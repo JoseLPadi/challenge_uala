@@ -52,6 +52,6 @@ private fun FilterWidgetContent(onFilter: (String) -> Unit){
 
 @Composable
 @Preview
-fun FilterWidgetPreview(){
+private fun FilterWidgetPreview(){
     FilterWidget { }
 }
