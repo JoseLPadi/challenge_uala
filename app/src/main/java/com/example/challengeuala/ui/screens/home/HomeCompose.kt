@@ -24,6 +24,7 @@ private fun HomeContent(isPortrait: Boolean){
     val cityList = listCitiesviewModel.listCities.collectAsState()
     val startList = listCitiesviewModel.initArrayListCities.collectAsState()
     val finishList = listCitiesviewModel.finishArrayListCities.collectAsState()
+    val citySelected = mapViewModel.citySelected.collectAsState()
 
 
     Row {
@@ -36,7 +37,7 @@ private fun HomeContent(isPortrait: Boolean){
                         { listCitiesviewModel.onShowFavorites(it) } )
         if (!isPortrait){
 
-            MapScreen(mapViewModel.citySelected)
+            MapScreen(citySelected.value)
 
         }
 
