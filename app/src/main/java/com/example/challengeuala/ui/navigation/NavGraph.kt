@@ -21,22 +21,27 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun NavGraphComposable(isPortrait: Boolean, modifier:Modifier = Modifier){
     val navController = rememberNavController()
+    val mapViewModel = koinViewModel<MapViewModel>()
+
     NavHost(navController = navController,
         modifier = modifier,
         startDestination = Destinations.HOME_SCREEN) {
 
         composable(route = Destinations.HOME_SCREEN) {
+
             Box(
                 modifier = Modifier.fillMaxSize()
                     .padding(WindowInsets.statusBars.asPaddingValues())
                     .navigationBarsPadding()
             ) {
-                HomeScreen(isPortrait)
+                HomeScreen(isPortrait, mapViewModel) { city ->
+                    // Navegar pasando el objeto City serializado
+                    navController.navigate(Destinations.DETAIL_CITY_MAP_ROUTE)
+                }
             }
         }
 
         composable(route = Destinations.DETAIL_CITY_MAP_ROUTE) {
-            val mapViewModel = koinViewModel<MapViewModel>()
             val city = mapViewModel.citySelected.collectAsState()
 
             Box(
@@ -44,7 +49,7 @@ fun NavGraphComposable(isPortrait: Boolean, modifier:Modifier = Modifier){
                     .padding(WindowInsets.statusBars.asPaddingValues())
                     .navigationBarsPadding()
             ) {
-                MapScreen(city.value)
+                MapScreen(city.value, Modifier)
             }
         }
 

@@ -32,8 +32,9 @@ fun ListCitiesScreen(list: List<City>,
                      onFilter: (String) -> Unit,
                      onCitySelected: (City) -> Unit,
                      onCityFavorite: (City, Boolean) ->Unit,
-                     onShowFavorites: (Boolean)->Unit){
-    ListCitiesContent(list,startList,finishList, onFilter, onCitySelected, onCityFavorite, onShowFavorites)
+                     onShowFavorites: (Boolean)->Unit,
+                     modifier: Modifier){
+    ListCitiesContent(list,startList,finishList, onFilter, onCitySelected, onCityFavorite, onShowFavorites, modifier)
 }
 
 @Composable
@@ -43,11 +44,12 @@ private fun ListCitiesContent(list:List<City>,
                               onFilter: (String) -> Unit,
                               onCitySelected: (City) -> Unit,
                               onCityFavorite: (City, Boolean) ->Unit,
-                              onShowFavorites: (Boolean)->Unit
+                              onShowFavorites: (Boolean)->Unit,
+                              modifier: Modifier
                               ){
     var showFavorite by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.padding(8.dp)) {
+    Column(modifier = modifier.padding(8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(text = "Show Favorites",
                 modifier = Modifier.padding(8.dp)
@@ -89,5 +91,5 @@ private fun ListCitiesPreview(){
         City("GE", "Gumist’a", 614371, Coord(40.973888, 43.026943),true),
         City("GE", "Ptitsefabrika", 874560, Coord(40.290558, 43.183613),true),
         City("GE", "Orekhovo", 874652, Coord(40.146111, 43.351391)))
-    ListCitiesScreen(testCities,0,4,{_ ->},{_ ->}, {_,_ ->},{_ ->})
+    ListCitiesScreen(testCities,0,4,{_ ->},{_ ->}, {_,_ ->},{_ ->},Modifier)
 }
