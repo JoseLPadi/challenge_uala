@@ -1,8 +1,12 @@
 package com.example.challengeuala.ui.screens.home
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import com.example.challengeuala.repository.entities.City
 import com.example.challengeuala.ui.screens.cities.CitiesViewModel
 import com.example.challengeuala.ui.screens.cities.ListCitiesScreen
 import com.example.challengeuala.ui.screens.map.MapScreen
@@ -11,34 +15,46 @@ import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun HomeScreen(isPortrait:Boolean){
-    HomeContent(isPortrait)
+fun HomeScreen(isPortrait:Boolean, mapViewModel: MapViewModel, onCitySelectedChangeScreen: (City) -> Unit){
+    HomeContent(isPortrait, mapViewModel, onCitySelectedChangeScreen)
 }
 
 
 
 @Composable
-private fun HomeContent(isPortrait: Boolean){
+private fun HomeContent(isPortrait: Boolean,mapViewModel: MapViewModel, onCitySelectedChangeScreen: (City) -> Unit){
     val listCitiesviewModel = koinViewModel<CitiesViewModel>()
-    val mapViewModel = koinViewModel<MapViewModel>()
     val cityList = listCitiesviewModel.listCities.collectAsState()
     val startList = listCitiesviewModel.initArrayListCities.collectAsState()
     val finishList = listCitiesviewModel.finishArrayListCities.collectAsState()
     val citySelected = mapViewModel.citySelected.collectAsState()
 
+    val weight = if(isPortrait) 1f else 0.6f
+    Row (modifier = Modifier.fillMaxSize()){
+        Box(modifier=Modifier.weight(weight)) {
+            ListCitiesScreen(
+                cityList.value,
+                startList.value,
+                finishList.value,
+                { listCitiesviewModel.onFilter(it) },
+                { city ->
+                    mapViewModel.updateCity(city) // Esto se ejecuta en Portrait
+                    if (isPortrait) {
+                        onCitySelectedChangeScreen(city) // Esto se ejecuta en Landscape
+                    }
+                },
+                { city, favorite -> listCitiesviewModel.onCityFavorite(city, favorite) },
+                { listCitiesviewModel.onShowFavorites(it) },
 
-    Row {
-        ListCitiesScreen(cityList.value,
-                        startList.value,
-                        finishList.value,
-                        { listCitiesviewModel.onFilter(it) },
-                        {mapViewModel.updateCity(it)},
-                        {city, favorite -> listCitiesviewModel.onCityFavorite(city, favorite)},
-                        { listCitiesviewModel.onShowFavorites(it) } )
-        if (!isPortrait){
+                modifier = Modifier
+            )
+        }
+        if (!isPortrait) {
+            Box(modifier = Modifier.weight(0.4f)) {
 
-            MapScreen(citySelected.value)
+                MapScreen(citySelected.value, modifier = Modifier)
 
+            }
         }
 
     }

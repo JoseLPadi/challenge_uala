@@ -15,20 +15,25 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
-fun MapScreen(citySelected: City?) {
-    MapContent(citySelected)
+fun MapScreen(citySelected: City?,modifier: Modifier) {
+    MapContent(citySelected, modifier)
 }
 
 @Composable
-private fun MapContent(citySelected: City?){
+private fun MapContent(citySelected: City?,modifier: Modifier){
 
     if (citySelected!=null) {
         val coord = LatLng(citySelected.coord.lat, citySelected.coord.lon)
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(coord, 12f) // Zoom adecuado para el marcador
         }
+
+        cameraPositionState.position  = CameraPosition.fromLatLngZoom(
+            coord,
+            cameraPositionState.position.zoom
+        )
         GoogleMap(
-            modifier = Modifier.padding(16.dp),
+            modifier = modifier.padding(16.dp),
             cameraPositionState = cameraPositionState
 
         ) {
@@ -44,5 +49,5 @@ private fun MapContent(citySelected: City?){
 @Preview
 private fun MapScreenPreview(){
     val city= City("RU", "Russian Federation", 2017370, Coord(100.0, 60.0))
-    MapScreen(city)
+    MapScreen(city,Modifier)
 }
