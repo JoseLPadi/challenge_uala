@@ -1,6 +1,7 @@
 package com.example.challengeuala.ui.screens.cities
 
 import androidx.lifecycle.viewModelScope
+import com.example.challengeuala.logic.SearchService
 import com.example.challengeuala.repository.api_service.interfaces.ApiInterface
 import com.example.challengeuala.repository.entities.City
 import com.example.challengeuala.ui.core.BaseViewModel
@@ -14,16 +15,20 @@ class CitiesViewModel(private val retrofitInterface: ApiInterface) : BaseViewMod
 
     private val _listCities = MutableStateFlow<List<City>>(emptyList())
     val listCities: StateFlow<List<City>> = _listCities.asStateFlow()
-    private val _initArrayListCities  =  MutableStateFlow<Int>(0)
-    val initArrayListCities: StateFlow<Int> = _initArrayListCities.asStateFlow()
-    private val _finishArrayListCities  =  MutableStateFlow<Int>(0)
-    val finishArrayListCities: StateFlow<Int> = _finishArrayListCities.asStateFlow()
+
+    private var _listCitiesAux = emptyList<City>()
 
 
     private var filterString : String = ""
+    private  var searchService: SearchService? = null
 
     fun onFilter(filter: String){
-        this.filterString = filter
+        if( searchService!=null) {
+            val result = searchService?.filterList(filter)
+            _listCities.value = _listCitiesAux.subList(result?.first ?: 0,  (result?.second ?: 0 )+ 1)
+            this.filterString = filter
+
+        }
     }
 
     fun onCityFavorite(city: City, favorite: Boolean) {
@@ -48,9 +53,9 @@ class CitiesViewModel(private val retrofitInterface: ApiInterface) : BaseViewMod
     fun getListCities(){
         viewModelScope.launch {
             try {
-                _listCities.value = retrofitInterface.getCities().await().sortedBy { it.name }
-                _initArrayListCities.value=0
-                _finishArrayListCities.value=_listCities.value.size
+                _listCitiesAux =  retrofitInterface.getCities().await().sortedBy { it.name.lowercase() }
+                _listCities.value = _listCitiesAux
+                searchService = SearchService(listCities.value)
             }catch (e: Exception){
                 e.printStackTrace()
 
