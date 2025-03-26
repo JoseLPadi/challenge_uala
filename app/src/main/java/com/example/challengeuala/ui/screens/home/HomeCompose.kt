@@ -25,8 +25,6 @@ fun HomeScreen(isPortrait:Boolean, mapViewModel: MapViewModel, onCitySelectedCha
 private fun HomeContent(isPortrait: Boolean,mapViewModel: MapViewModel, onCitySelectedChangeScreen: (City) -> Unit){
     val listCitiesviewModel = koinViewModel<CitiesViewModel>()
     val cityList = listCitiesviewModel.listCities.collectAsState()
-    val startList = listCitiesviewModel.initArrayListCities.collectAsState()
-    val finishList = listCitiesviewModel.finishArrayListCities.collectAsState()
     val citySelected = mapViewModel.citySelected.collectAsState()
 
     val weight = if(isPortrait) 1f else 0.6f
@@ -34,8 +32,6 @@ private fun HomeContent(isPortrait: Boolean,mapViewModel: MapViewModel, onCitySe
         Box(modifier=Modifier.weight(weight)) {
             ListCitiesScreen(
                 cityList.value,
-                startList.value,
-                finishList.value,
                 { listCitiesviewModel.onFilter(it) },
                 { city ->
                     mapViewModel.updateCity(city) // Esto se ejecuta en Portrait

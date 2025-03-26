@@ -27,20 +27,16 @@ import com.example.challengeuala.ui.widget.ItemCityWidget
 
 @Composable
 fun ListCitiesScreen(list: List<City>,
-                     startList:Int,
-                     finishList:Int,
                      onFilter: (String) -> Unit,
                      onCitySelected: (City) -> Unit,
                      onCityFavorite: (City, Boolean) ->Unit,
                      onShowFavorites: (Boolean)->Unit,
                      modifier: Modifier){
-    ListCitiesContent(list,startList,finishList, onFilter, onCitySelected, onCityFavorite, onShowFavorites, modifier)
+    ListCitiesContent(list, onFilter, onCitySelected, onCityFavorite, onShowFavorites, modifier)
 }
 
 @Composable
 private fun ListCitiesContent(list:List<City>,
-                              start:Int,
-                              finish:Int,
                               onFilter: (String) -> Unit,
                               onCitySelected: (City) -> Unit,
                               onCityFavorite: (City, Boolean) ->Unit,
@@ -73,8 +69,8 @@ private fun ListCitiesContent(list:List<City>,
         }
         FilterWidget(onFilter)
         LazyColumn {
-            items(finish-start) { city ->
-                ItemCityWidget(city= list[city+start],
+            items(list.size) { city ->
+                ItemCityWidget(city= list[city],
                                 onCityFavorite,
                                 onCitySelected)
         } }
@@ -91,5 +87,5 @@ private fun ListCitiesPreview(){
         City("GE", "Gumist’a", 614371, Coord(40.973888, 43.026943),true),
         City("GE", "Ptitsefabrika", 874560, Coord(40.290558, 43.183613),true),
         City("GE", "Orekhovo", 874652, Coord(40.146111, 43.351391)))
-    ListCitiesScreen(testCities,0,4,{_ ->},{_ ->}, {_,_ ->},{_ ->},Modifier)
+    ListCitiesScreen(testCities,{_ ->},{_ ->}, {_,_ ->},{_ ->},Modifier)
 }
