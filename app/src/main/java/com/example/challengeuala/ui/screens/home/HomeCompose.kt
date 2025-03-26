@@ -41,7 +41,7 @@ private fun HomeContent(isPortrait: Boolean,mapViewModel: MapViewModel, onCitySe
                 },
                 { city, favorite -> listCitiesviewModel.onCityFavorite(city, favorite) },
                 { listCitiesviewModel.onShowFavorites(it) },
-
+                listCitiesviewModel.loadingDialog.collectAsState(),
                 modifier = Modifier
             )
         }

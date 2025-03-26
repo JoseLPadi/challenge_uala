@@ -9,6 +9,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,24 +25,30 @@ import com.example.challengeuala.repository.entities.City
 import com.example.challengeuala.repository.entities.Coord
 import com.example.challengeuala.ui.widget.FilterWidget
 import com.example.challengeuala.ui.widget.ItemCityWidget
+import com.example.challengeuala.ui.widget.LoadingDialog
 
 @Composable
-fun ListCitiesScreen(list: List<City>,
-                     onFilter: (String) -> Unit,
-                     onCitySelected: (City) -> Unit,
-                     onCityFavorite: (City, Boolean) ->Unit,
-                     onShowFavorites: (Boolean)->Unit,
-                     modifier: Modifier){
-    ListCitiesContent(list, onFilter, onCitySelected, onCityFavorite, onShowFavorites, modifier)
+fun ListCitiesScreen(
+    list: List<City>,
+    onFilter: (String) -> Unit,
+    onCitySelected: (City) -> Unit,
+    onCityFavorite: (City, Boolean) -> Unit,
+    onShowFavorites: (Boolean) -> Unit,
+    loadingAlert: State<Boolean>,
+    modifier: Modifier
+){
+    ListCitiesContent(list, onFilter, onCitySelected, onCityFavorite, onShowFavorites, loadingAlert, modifier)
 }
 
 @Composable
-private fun ListCitiesContent(list:List<City>,
-                              onFilter: (String) -> Unit,
-                              onCitySelected: (City) -> Unit,
-                              onCityFavorite: (City, Boolean) ->Unit,
-                              onShowFavorites: (Boolean)->Unit,
-                              modifier: Modifier
+private fun ListCitiesContent(
+    list: List<City>,
+    onFilter: (String) -> Unit,
+    onCitySelected: (City) -> Unit,
+    onCityFavorite: (City, Boolean) -> Unit,
+    onShowFavorites: (Boolean) -> Unit,
+    loadingAlert: State<Boolean>,
+    modifier: Modifier
                               ){
     var showFavorite by remember { mutableStateOf(false) }
 
@@ -74,18 +81,20 @@ private fun ListCitiesContent(list:List<City>,
                                 onCityFavorite,
                                 onCitySelected)
         } }
+        if (loadingAlert.value) {
+            LoadingDialog { true }
+        }
     }
 
 }
 
-
-@Composable
 @Preview
+@Composable
 private fun ListCitiesPreview(){
     val testCities =  listOf(
         City("RU", "Yurevichi", 803611, Coord(39.934444, 43.600555)),
         City("GE", "Gumist’a", 614371, Coord(40.973888, 43.026943),true),
         City("GE", "Ptitsefabrika", 874560, Coord(40.290558, 43.183613),true),
         City("GE", "Orekhovo", 874652, Coord(40.146111, 43.351391)))
-    ListCitiesScreen(testCities,{_ ->},{_ ->}, {_,_ ->},{_ ->},Modifier)
+    //ListCitiesScreen(testCities,{_ ->},{_ ->}, {_,_ ->},{_ ->},{State<Boolean>(true)},Modifier)
 }
