@@ -63,10 +63,12 @@ class CitiesViewModel(private val retrofitInterface: ApiInterface, private val f
 
     init {
         viewModelScope.launch {
+            _loadingDialog.value=true
             getListCities()
             getFavoriteCities()
             updateListCitiesWithFavorites()
             onShowFavorites(showingFavorites)
+            _loadingDialog.value=false
         }
     }
 
