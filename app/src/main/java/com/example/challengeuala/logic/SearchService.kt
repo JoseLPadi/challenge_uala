@@ -3,7 +3,7 @@ package com.example.challengeuala.logic
 import android.util.Log
 import com.example.challengeuala.repository.entities.City
 
-class SearchService(private val list:List<City>) {
+class SearchService(private var list:List<City>) {
 
     //two pivots, they will show the start and the finish filter.
     private var filteredStart =0
@@ -12,6 +12,13 @@ class SearchService(private val list:List<City>) {
     private var oldTextFilter:String = ""
     init {
         filteredEnd= list.size-1
+    }
+
+
+    fun updateList(newList: List<City>){
+        this.list=newList
+        filteredStart=0
+        filteredEnd=newList.size
     }
     /**
      * return a pair with init and finish position of the array that is filtered.
@@ -125,8 +132,5 @@ class SearchService(private val list:List<City>) {
                 return searchElementStartWith(textFilter, start, mid)
             else return searchElementStartWith(textFilter, mid, end)
     }
-
-
-
 
 }
